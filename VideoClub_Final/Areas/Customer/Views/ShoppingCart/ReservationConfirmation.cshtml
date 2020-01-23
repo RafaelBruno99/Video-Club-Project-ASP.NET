@@ -1,0 +1,24 @@
+﻿@model VideoClub_Final.Models.ViewModel.ShoppingCartViewModel
+
+@{
+    ViewData["Title"] = "ReservationConfirmation";
+}
+
+<br />
+
+<h2 class="text-info"> Reservation Confirmation</h2>
+
+<div class="form-text">
+    We are currently packing your order!
+    Please come to the shop to collect our order on the 23/01/2020
+    Please feel free to search for more of our awesome products!
+
+</div>
+<br />
+
+<partial name="~/Views/Shared/_CustomerDetails.cshtml" model="Model.Reservation" />
+<br />
+
+<partial name="~/Views/Shared/_ReservationDetails.cshtml" model="Model.Products" />
+
+<a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-success"> Back To Products</a>

@@ -1,0 +1,121 @@
+﻿@model VideoClub_Final.Models.ViewModel.ShoppingCartViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<form method="post">
+    <br /><br />
+    <h2 class="text-info">Your Shopping Cart</h2>
+    @if (Model.Products.Count > 0)
+    {
+        <div class="container border border-secondary rounded " style="padding: 15px">
+            <div class="row">
+                <div class="col-8" style="border-right: 1px solid #bbb9b9;">
+                    <table class="table table-striped" width="100%">
+                        <tr class="table-info">
+                            <th style="text-align: center; width:20%"></th>
+                            <th style="text-align: center;">
+                                <label asp-for="@Model.Products.FirstOrDefault().Name"></label>
+                            </th>
+                            <th style="text-align: center;">
+                                <label asp-for="@Model.Products.FirstOrDefault().Price"></label>
+                            </th>
+                            <th style="text-align: center;">
+                                <label asp-for="@Model.Products.FirstOrDefault().ProductTypes.Name"></label>
+                            </th>
+                            <th>
+
+                            </th>
+                        </tr>
+                        @foreach (var item in Model.Products)
+                        {
+                            <tr style="padding: 20px">
+                                <td>
+                                    <a asp-area="Customer" asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
+                                        <img src="@item.Image" width="100%" style="margin: auto; display: block; border-radius: 5px; border: 1px solid #bbb9b9" />
+                                    </a>
+                                </td>
+                                <td style="text-align: center">
+                                    @Html.DisplayFor(c => item.Name)
+                                </td>
+                                <td style="text-align: center">
+                                    @Html.DisplayFor(c => item.Price)
+                                </td>
+                                <td style="text-align: center">
+                                    @Html.DisplayFor(c => item.ProductTypes.Name)
+                                </td>
+                                <td style="text-align: center">
+                                    <button type="submit" class="btn btn-danger" asp-action="remove" asp-route-id="@item.Id"> Remove </button>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+
+                </div>
+                <div class="col-4" style="padding-left: 30px">
+                    <div class="row">
+                        <div class="col-12">
+                            <label>Name: </label>
+                        </div>
+                        <div class="col-12" style="padding-bottom: 15px">
+                            <input asp-for="@Model.Reservation.CustomerName" class="form-control" />
+                        </div>
+                        <div class="col-12">
+                            <label>Phone Number: </label>
+                        </div>
+                        <div class="col-12">
+                            <input asp-for="@Model.Reservation.CustomerPhoneNumber" class="form-control" />
+                        </div>
+                        <div class="col-12" style="padding-bottom: 15px">
+                            <label>Email: </label>
+                        </div>
+                        <div class="col-12" style="padding-bottom: 15px">
+                            <input asp-for="@Model.Reservation.CustomerEmail" class="form-control" />
+                        </div>
+                        <div class="col-12" style="padding-bottom: 15px">
+                            <label>Reservation Date: </label>
+                        </div>
+                        <div class="col-12" style="padding-bottom: 15px">
+                            <input asp-for="@Model.Reservation.ReservationDate" value="" type="text" id="datepicker" class="form-control" />
+                        </div>
+                        <div class="col-12">
+                            <label>Reservation Time: </label>
+                        </div>
+                        <div class="col-12" style="padding-bottom: 15px">
+                            <input asp-for="@Model.Reservation.ReservationTime" value="" type="text" class="timepicker form-control" />
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" id="btnPlaceOrder" class="btn btn-success">Reserve</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div>There is no products added in the Shopping Cart, is time to shop!</div>
+    }
+</form>
+
+@section Scripts{ 
+    <script>
+        $('.timepicker').timepicker({
+            timeFormat: 'h:mm p',
+            interval: 60,
+            minTime: '10',
+            maxTime: '6:00pm',
+            defaultTime: '11',
+            startTime: '8:00',
+            dynamic: true,
+            dropdown: true,
+            scrollbar: true
+        });
+        $( function() {
+            $("#datepicker").datepicker({
+                minDate: +1, maxDate :+7
+            });
+        } );
+
+    </script>
+}
