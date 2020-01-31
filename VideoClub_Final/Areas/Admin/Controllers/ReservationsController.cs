@@ -170,6 +170,43 @@ namespace VideoClub_Final.Areas.Admin.Controllers
 
             return View(objReservationViewModel);
         }
+
+        //Delete Action Method
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var productList = (IEnumerable<Products>)(from p in _db.Products
+                join a in _db.ProductReserved
+                    on p.Id equals a.ProductId
+                where a.ReservationId == id
+                select p).Include("ProductTypes");
+
+            ReservationDetailsViewModel objReservationViewModel = new ReservationDetailsViewModel()
+            {
+                Reservation = _db.Reservation.Include(a => a.StoreUser).Where(a => a.Id == id).FirstOrDefault(),
+                StoreUser = _db.ApplicationUser.ToList(),
+                Products = productList.ToList()
+            };
+
+            return View(objReservationViewModel);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var reservation = await _db.Reservation.FindAsync(id);
+            _db.Reservation.Remove(reservation);
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 
 }

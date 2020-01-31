@@ -1,8 +1,115 @@
-﻿
+﻿@model VideoClub_Final.Models.ViewModel.ReservationDetailsViewModel
+@using VideoClub_Final.Extensions
+@using VideoClub_Final.Utility
+
 @{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Edit";
 }
 
-<h2>Details</h2>
+<br />
+<h2 class="text-info">Reservation Details</h2>
 
+
+<div class="p-4 border rounded row">
+    <div class="col-6">
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Reservation.CustomerName"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Reservation.CustomerName" disabled class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Reservation.CustomerEmail"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Reservation.CustomerEmail" disabled class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Reservation.ReservationDate"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Reservation.ReservationDate" disabled id="datepicker" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Reservation.ReservationTime"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Reservation.ReservationTime" type="text" id="timepicker" class=" form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Reservation.CustomerPhoneNumber"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Reservation.CustomerPhoneNumber" disabled class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Reservation.StoreUser"></label>
+            </div>
+            <div class="col-8">
+                @if (User.IsInRole(SD.AdminEndUser))
+                {
+                    <input asp-for="@Model.Reservation.StoreUser.Name" disabled class="form-control" />
+                    <input asp-for="@Model.Reservation.StoreId" hidden />
+                }
+                else
+                {
+                    <select asp-for="@Model.Reservation.StoreId" asp-items="Model.StoreUser.ToSelectListItemString(Model.Reservation.StoreId)" class="form-control"></select>
+                }
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Reservation.isConfirmed"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Reservation.isConfirmed" disabled class="form-control" />
+            </div>
+        </div>
+
+    </div>
+    <div class="col-6">
+        <partial name="~/Views/Shared/_ReservationDetails.cshtml" model="Model.Products" />
+    </div>
+
+    <br />
+    <div class="form-group">
+
+        <a asp-action="Index" class="btn btn-success">Back to list</a>
+    </div>
+
+</div>
+
+@section Scripts{
+
+<script>
+
+    $(document).ready(function () {
+        var reservationTime = document.getElementById("datepicker").value;
+        var splitData = "";
+        if (reservationTime.indexOf("") > 0) {
+            splitData = reservationTime.split("");
+        } else {
+            splitData = reservationTime.split("T");
+        }
+        var time = splitData[1].substring(0, 5);
+        if (time.slice(-1) == ":") {
+            time = time.substring(0, time.length - 1);
+        }
+        var amPmtime = splitData[2];
+        $("#datepicker").attr("value", splitData[0]);
+        $("#timepicker").attr("value", time + "" + amPmtime);
+    });
+
+</script>
+}

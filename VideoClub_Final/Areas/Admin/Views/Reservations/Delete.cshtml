@@ -1,0 +1,121 @@
+﻿@model VideoClub_Final.Models.ViewModel.ReservationDetailsViewModel
+@using VideoClub_Final.Extensions
+@using VideoClub_Final.Utility
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<br />
+<h2 class="text-info">Delete Reservation</h2>
+
+<form method="post">
+
+    <div class="p-4 border rounded row">
+        <input hidden asp-for="Reservation.Id" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-6">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Reservation.CustomerName"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Reservation.CustomerName" readonly="" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Reservation.CustomerEmail"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Reservation.CustomerEmail" readonly="" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Reservation.ReservationDate"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Reservation.ReservationDate" id="datepicker" readonly="" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Reservation.ReservationTime"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Reservation.ReservationTime" id="timepicker" type="text" readonly="" class="timepicker form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Reservation.CustomerPhoneNumber"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Reservation.CustomerPhoneNumber" readonly="" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Reservation.StoreUser"></label>
+                </div>
+                <div class="col-8">
+                    @if (User.IsInRole(SD.AdminEndUser))
+                    {
+                        <input asp-for="@Model.Reservation.StoreUser.Name" readonly class="form-control" />
+                        <input asp-for="@Model.Reservation.StoreId" hidden />
+                    }
+                    else
+                    {
+                        <select asp-for="@Model.Reservation.StoreId" asp-items="Model.StoreUser.ToSelectListItemString(Model.Reservation.StoreId)" class="form-control"></select>
+                    }
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Reservation.isConfirmed"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Reservation.isConfirmed" class="form-control" />
+                </div>
+            </div>
+
+        </div>
+        <div class="col-6">
+            <partial name="~/Views/Shared/_ReservationDetails.cshtml" model="Model.Products" />
+        </div>
+
+        <br />
+        <div class="form-group">
+            <input type="submit" class="btn btn-danger" asp-route-id="@Model.Reservation.Id" value="Delete" />
+            <a asp-action="Index" class="btn btn-success">Back to list</a>
+        </div>
+
+    </div>
+
+</form>
+
+
+@section Scripts{
+
+<script>
+ 
+    $(document).ready(function () {
+        var reservationTime = document.getElementById("datepicker").value;
+        var splitData = "";
+        if (reservationTime.indexOf("") > 0) {
+            splitData = reservationTime.split("");
+        } else {
+            splitData = reservationTime.split("T");
+        }
+        var time = splitData[1].substring(0, 5);
+        if (time.slice(-1) == ":") {
+            time = time.substring(0, time.length - 1);
+        }
+        var amPmtime = splitData[2];
+        $("#datepicker").attr("value", splitData[0]);
+        $("#timepicker").attr("value", time + "" + amPmtime);
+    });
+
+</script>
+}

@@ -10,7 +10,7 @@
 
 <div class="form-text">
     We are currently packing your order!
-    Please come to the shop to collect our order on the 23/01/2020
+    Please come to the shop to collect our order on the <input asp-for="Reservation.ReservationDate" disabled id="datepicker" type="text" class="form-control" />
     Please feel free to search for more of our awesome products!
 
 </div>
@@ -22,3 +22,27 @@
 <partial name="~/Views/Shared/_ReservationDetails.cshtml" model="Model.Products" />
 
 <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-success"> Back To Products</a>
+
+@section Scripts{
+
+    <script>
+
+        $(document).ready(function () {
+            var reservationTime = document.getElementById("datepicker").value;
+            var splitData = "";
+            if (reservationTime.indexOf("") > 0) {
+                splitData = reservationTime.split("");
+            } else {
+                splitData = reservationTime.split("T");
+            }
+            var time = splitData[1].substring(0, 5);
+            if (time.slice(-1) == ":") {
+                time = time.substring(0, time.length - 1);
+            }
+            var amPmtime = splitData[2];
+            $("#datepicker").attr("value", splitData[0]);
+            $("#timepicker").attr("value", time + "" + amPmtime);
+        });
+
+    </script>
+}

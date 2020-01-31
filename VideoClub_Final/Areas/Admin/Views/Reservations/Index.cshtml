@@ -4,7 +4,7 @@
 
     <br /><br />
 
-    <h2 class="text-info"> Reservation List - Stores Assigment </h2>
+    <h2 class="text-info"> Reservation List - Stores Assignment </h2>
 
     <br />
     <div style="height: 150px; background-color: aliceblue" class="container">
@@ -69,6 +69,7 @@
         </div>
 
         <br /><br />
+        
 
         <div>
             <table class="table table-striped border">
@@ -125,12 +126,26 @@
     </div>
 </form>
 @section Scripts{
+
     <script>
-        $( function() {
-            $("#datepicker").datepicker({
-                minDate: +1, maxDate :+7
-            });
-        } );
+
+        $(document).ready(function () {
+            var reservationTime = document.getElementById("datepicker").value;
+            var splitData = "";
+            if (reservationTime.indexOf("") > 0) {
+                splitData = reservationTime.split("");
+            } else {
+                splitData = reservationTime.split("T");
+            }
+            var time = splitData[1].substring(0, 5);
+            if (time.slice(-1) == ":") {
+                time = time.substring(0, time.length - 1);
+            }
+            var amPmtime = splitData[2];
+            $("#datepicker").attr("value", splitData[0]);
+            $("#timepicker").attr("value", time + "" + amPmtime);
+        });
 
     </script>
 }
+
