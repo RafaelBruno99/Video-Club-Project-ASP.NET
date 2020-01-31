@@ -13,12 +13,30 @@ namespace VideoClub_Final.Extensions
         {
 
             return from item in items
-                select new SelectListItem
-                {
-                    Text = item.GetPropertyValue("Name"),
-                    Value = item.GetPropertyValue("Id"),
-                    Selected = item.GetPropertyValue("Id").Equals(selectValue.ToString())
-                };
+                   select new SelectListItem
+                   {
+                       Text = item.GetPropertyValue("Name"),
+                       Value = item.GetPropertyValue("Id"),
+                       Selected = item.GetPropertyValue("Id").Equals(selectValue.ToString())
+                   };
+
+
+        }
+
+        public static IEnumerable<SelectListItem> ToSelectListItemString<T>(this IEnumerable<T> items, string selectValue)
+        {
+            if (selectValue == null)
+            {
+                selectValue = "";
+            }
+
+            return from item in items
+                   select new SelectListItem
+                   {
+                       Text = item.GetPropertyValue("Name"),
+                       Value = item.GetPropertyValue("Id"),
+                       Selected = item.GetPropertyValue("Id").Equals(selectValue.ToString())
+                   };
 
 
         }
